@@ -2,13 +2,8 @@
 #include <iostream>
 using namespace std;
 
-enum class Operation{
-    weith = 1,
-    normal,
-};
-
-const int WINDOW_WIDTH = 2440;
-const int WINDOW_HEIGHT = 1280;
+int WINDOW_WIDTH = 0;
+int WINDOW_HEIGHT = 0;
 
 void centerActiveWindow(){
     HWND hwnd = GetForegroundWindow();
@@ -17,9 +12,8 @@ void centerActiveWindow(){
 
     int screenWidth = GetSystemMetrics(SM_CXSCREEN);
     int screenHeight = GetSystemMetrics(SM_CYSCREEN);
-
     int x = (screenWidth - WINDOW_WIDTH) / 2;
-    int y = (screenHeight - WINDOW_HEIGHT) / 2;
+    int y = (screenHeight - WINDOW_HEIGHT) / 2 - 24;
     SetWindowPos(
         hwnd,
         NULL,
@@ -31,16 +25,31 @@ void centerActiveWindow(){
     );
 }
 
-int windowSetting(int choice){
+void programLogic(){
+    int choice;
+    cout << "1. 21/9: 2440x1080\n";
+    cout << "2. 16/9: 1600x900\n";
     cout << "choice: ";
     cin >> choice;
-    cout << "1. 21/9: 2440x1080";
-    cout << "2. 16/10: 1600x900";
-    return choice;
+    switch (choice){
+    case 1:
+        WINDOW_WIDTH = 2440;
+        WINDOW_HEIGHT = 1280;
+        break;
+    case 2:
+        WINDOW_WIDTH = 1600;
+        WINDOW_HEIGHT = 900;
+        break;
+    default:
+        cout << "Invalid choice, using default 800x600.\n";
+        WINDOW_WIDTH = 800;
+        WINDOW_HEIGHT = 600;
+        break;
+    }
 }
 
 int main(){
-    int choice;
+    programLogic();
     if (!RegisterHotKey(NULL, 1, MOD_CONTROL | MOD_ALT, 'V'))
         return 1;
     MSG msg;
